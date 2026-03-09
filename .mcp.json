@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "hetzner": {
+      "command": "mcp-hetzner",
+      "env": {
+        "HCLOUD_TOKEN": "${HCLOUD_TOKEN}"
+      }
+    }
+  }
+}
