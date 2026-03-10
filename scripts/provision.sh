@@ -3,21 +3,6 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Update and upgrade
-apt-get update
-apt-get upgrade -y
-
-# Install common tools
-apt-get install -y \
-  curl \
-  wget \
-  unzip \
-  ca-certificates \
-  gnupg \
-  git \
-  zsh \
-  tmux
-
 # Install Neovim (latest stable via PPA)
 add-apt-repository -y ppa:neovim-ppa/stable
 apt-get update

@@ -48,10 +48,16 @@ source "hcloud" "ubuntu24-pa-dev" {
   ssh_keys     = var.ssh_key_names
   communicator = "ssh"
   ssh_username = "root"
+  user_data    = file("cloud-init-default.yaml")
 }
 
 build {
   sources = ["source.hcloud.ubuntu24-pa-dev"]
+
+  provisioner "shell" {
+    inline           = ["cloud-init status --wait"]
+    valid_exit_codes = [0, 2]
+  }
 
   provisioner "file" {
     source      = "scripts/cleanup.sh"

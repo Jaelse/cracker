@@ -3,18 +3,6 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Update and upgrade
-apt-get update
-apt-get upgrade -y
-
-# Install dependencies
-apt-get install -y \
-  curl \
-  wget \
-  ca-certificates \
-  gnupg \
-  git
-
 # Install Node.js LTS
 curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 apt-get install -y nodejs

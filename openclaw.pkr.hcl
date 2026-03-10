@@ -14,7 +14,7 @@ variable "hcloud_token" {
 
 variable "server_type" {
   type    = string
-  default = "cpx11"
+  default = "cpx22"
 }
 
 variable "location" {
@@ -48,10 +48,16 @@ source "hcloud" "ubuntu24-openclaw" {
   ssh_keys     = var.ssh_key_names
   communicator = "ssh"
   ssh_username = "root"
+  user_data    = file("cloud-init-openclaw.yaml")
 }
 
 build {
   sources = ["source.hcloud.ubuntu24-openclaw"]
+
+  provisioner "shell" {
+    inline           = ["cloud-init status --wait"]
+    valid_exit_codes = [0, 2]
+  }
 
   provisioner "file" {
     source      = "scripts/cleanup.sh"

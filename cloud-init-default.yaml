@@ -1,0 +1,30 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - wget
+  - unzip
+  - ca-certificates
+  - gnupg
+  - git
+  - zsh
+  - tmux
+
+# Disable root password login (key-based only)
+ssh_pwauth: false
+
+chpasswd:
+  expire: false
+
+# Grow filesystem to use all available disk space
+growpart:
+  mode: auto
+  devices: ["/"]
+
+resize_rootfs: true
+
+locale: en_US.UTF-8
+timezone: UTC
