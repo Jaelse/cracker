@@ -69,11 +69,20 @@ build {
   }
 
   provisioner "file" {
-    source      = "scripts/openclaw-start.sh"
-    destination = "/tmp/openclaw-start.sh"
+    source      = "scripts/openclaw-setup.sh"
+    destination = "/usr/local/bin/openclaw-setup.sh"
+  }
+
+  provisioner "file" {
+    source      = "scripts/openclaw-onboard.sh"
+    destination = "/usr/local/bin/openclaw-onboard.sh"
   }
 
   provisioner "shell" {
-    script = "scripts/install_openclaw.sh"
+    inline = [
+      "chmod +x /usr/local/bin/openclaw-setup.sh",
+      "chmod +x /usr/local/bin/openclaw-onboard.sh"
+    ]
   }
+
 }

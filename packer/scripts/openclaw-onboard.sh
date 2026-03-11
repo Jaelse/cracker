@@ -1,23 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENV_SOURCE="/root/openclaw.env"
-
-if [[ ! -f "$ENV_SOURCE" ]]; then
-  echo "ERROR: $ENV_SOURCE not found. Place your .env file there and reboot or re-run." >&2
-  exit 1
-fi
-
 set -a
-source "$ENV_SOURCE"
+source /root/openclaw.env
 set +a
 
-# Onboard with Anthropic if key is set
-if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+if [[ -n "$ANTHROPIC_API_KEY" ]]; then
+  echo "==> Onboarding with Anthropic..."
   openclaw onboard --non-interactive \
+    --accept-risk \
     --mode local \
     --auth-choice apiKey \
     --anthropic-api-key "$ANTHROPIC_API_KEY" \
+    --gateway-port 18789 \
+    --gateway-bind loopback \
+    --gateway-auth token \
+    --install-daemon \
+    --daemon-runtime node \
+    --skip-skills
+fi
+
+if [[ -n "$GEMINI_API_KEY" ]]; then
+  echo "==> Onboarding with Gemini..."
+  openclaw onboard --non-interactive \
+    --accept-risk \
+    --workspace "$OPENCLAW_WORKSPACE_DIR"
+    --mode local \
+    --auth-choice gemini-api-key \
+    --gemini-api-key "$GEMINI_API_KEY" \
+    --gateway-auth token \
     --gateway-port 18789 \
     --gateway-bind loopback \
     --install-daemon \
@@ -25,15 +36,4 @@ if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
     --skip-skills
 fi
 
-# Onboard with Gemini if key is set
-if [[ -n "${GEMINI_API_KEY:-}" ]]; then
-  openclaw onboard --non-interactive \
-    --mode local \
-    --auth-choice gemini-api-key \
-    --gemini-api-key "$GEMINI_API_KEY" \
-    --gateway-port 18789 \
-    --gateway-bind loopback
-fi
-
-# Disable this service after successful first run
-systemctl disable openclaw-setup.service
+echo "==> OpenClaw onboarding complete."

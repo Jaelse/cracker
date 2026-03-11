@@ -38,7 +38,7 @@ Edit `.env` and fill in:
 | `HCLOUD_TOKEN` | Hetzner Cloud API token (used by deploy.sh) |
 | `ANTHROPIC_API_KEY` | Anthropic API key (optional if Gemini is set) |
 | `GEMINI_API_KEY` | Gemini API key (optional if Anthropic is set) |
-| `OPENCLAW_GATEWAY_TOKEN` | OpenClaw gateway token |
+| `OPENCLAW_GATEWAY_TOKEN` | OpenClaw gateway token (optional) |
 
 At least one of `ANTHROPIC_API_KEY` or `GEMINI_API_KEY` must be set.
 
@@ -85,12 +85,14 @@ All configuration is driven by environment variables. The script reads `.env` if
 | `HCLOUD_TOKEN` | yes | — | Hetzner API token |
 | `ANTHROPIC_API_KEY` | one of | — | Anthropic API key |
 | `GEMINI_API_KEY` | one of | — | Gemini API key |
-| `OPENCLAW_GATEWAY_TOKEN` | yes | — | OpenClaw gateway token |
+| `OPENCLAW_GATEWAY_TOKEN` | no | — | OpenClaw gateway token |
 | `SERVER_NAME` | no | `openclaw-<timestamp>` | Server name |
 | `SERVER_TYPE` | no | `cpx22` | Hetzner server type |
 | `SERVER_LOCATION` | no | `hel1` | Hetzner location |
 | `SSH_KEY_LABELS` | no | — | Hetzner label selector for SSH keys |
 | `SSH_KEY_NAMES` | no | — | Comma-separated SSH key names |
+| `PRIMARY_IPV4` | no | — | Existing Hetzner primary IPv4 address to assign |
+| `PRIMARY_IPV4_LABEL` | no | — | Hetzner label selector for primary IPv4 (e.g. `day_claw_ip`) |
 
 ### Examples
 

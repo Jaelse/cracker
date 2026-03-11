@@ -1,0 +1,45 @@
+#cloud-config
+
+write_files:
+  - path: /root/openclaw.env
+    owner: root:root
+    permissions: "0600"
+    content: |
+      ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      GEMINI_API_KEY=${GEMINI_API_KEY}
+      OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_BIND=${OPENCLAW_GATEWAY_BIND}
+      OPENCLAW_GATEWAY_PORT=${OPENCLAW_GATEWAY_PORT}
+      OPENCLAW_BRIDGE_PORT=${OPENCLAW_BRIDGE_PORT}
+      OPENCLAW_CONFIG_DIR=${OPENCLAW_CONFIG_DIR}
+      OPENCLAW_WORKSPACE_DIR=${OPENCLAW_WORKSPACE_DIR}
+      OPENCLAW_SANDBOX=${OPENCLAW_SANDBOX}
+      OPENCLAW_DOCKER_SOCKET=${OPENCLAW_DOCKER_SOCKET}
+      OPENCLAW_HOME_VOLUME=${OPENCLAW_HOME_VOLUME}
+      OPENCLAW_EXTRA_MOUNTS=${OPENCLAW_EXTRA_MOUNTS}
+      OPENCLAW_DOCKER_APT_PACKAGES=${OPENCLAW_DOCKER_APT_PACKAGES}
+      OPENCLAW_EXTENSIONS=${OPENCLAW_EXTENSIONS}
+      OPENCLAW_INSTALL_DOCKER_CLI=${OPENCLAW_INSTALL_DOCKER_CLI}
+      OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=${OPENCLAW_ALLOW_INSECURE_PRIVATE_WS}
+      VOLUME_IDS=${VOLUME_IDS}
+      VOLUME_MOUNT=${VOLUME_MOUNT}
+
+  - path: /root/mount-volume.sh
+    owner: root:root
+    permissions: "0700"
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      set -a
+      source /root/openclaw.env
+      set +a
+
+      mkdir -p "$VOLUME_MOUNT"
+      mount "/dev/disk/by-id/scsi-0HC_Volume_$VOLUME_IDS" "$VOLUME_MOUNT"
+      echo "/dev/disk/by-id/scsi-0HC_Volume_$VOLUME_IDS $VOLUME_MOUNT ext4 discard,nofail,defaults 0 0" >> /etc/fstab
+      echo "==> Volume mounted at $VOLUME_MOUNT"
+
+runcmd:
+  - bash /root/mount-volume.sh
+  - bash /usr/local/bin/openclaw-setup.sh
