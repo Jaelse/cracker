@@ -11,4 +11,4 @@ npm install -g openclaw@latest
 # Install bash completion
 openclaw completion -i -s bash -y --write-state
 
-npm install clawhub@latest 
+
